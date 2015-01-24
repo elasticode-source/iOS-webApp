@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vXZ-lx-hvc">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="ufC-wZ-h7g">
+            <objects>
+                <viewController id="vXZ-lx-hvc" customClass="ViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="jyV-Pf-zRb"/>
+                        <viewControllerLayoutGuide type="bottom" id="2fi-mo-0CV"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="kh9-bI-dsS">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <webView contentMode="scaleToFill" misplaced="YES" scalesPageToFit="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Q8s-m3-LkO">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <dataDetectorType key="dataDetectorTypes" phoneNumber="YES" link="YES" address="YES" calendarEvent="YES"/>
+                            </webView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dba-Dc-9JI" userLabel="splashAnimation">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <subviews>
+                                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="Qwi-PL-k8t">
+                                        <rect key="frame" x="282" y="281" width="37" height="37"/>
+                                    </activityIndicatorView>
+                                </subviews>
+                                <color key="backgroundColor" white="0.74773746910000005" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="centerX" secondItem="Qwi-PL-k8t" secondAttribute="centerX" id="YHJ-Jc-Kwy"/>
+                                    <constraint firstAttribute="centerY" secondItem="Qwi-PL-k8t" secondAttribute="centerY" id="bIN-Us-CgU"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="Q8s-m3-LkO" firstAttribute="top" secondItem="kh9-bI-dsS" secondAttribute="topMargin" constant="20" id="8y9-di-SWl"/>
+                            <constraint firstItem="dba-Dc-9JI" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" constant="-16" id="FfJ-dc-bZv"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="Q8s-m3-LkO" secondAttribute="trailing" constant="-16" id="Qbb-oC-daf"/>
+                            <constraint firstItem="Q8s-m3-LkO" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" constant="-16" id="eNX-vz-Ord"/>
+                            <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="Q8s-m3-LkO" secondAttribute="bottom" id="eOO-Re-gq1"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="dba-Dc-9JI" secondAttribute="trailing" constant="-16" id="lbI-R8-0M7"/>
+                            <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="dba-Dc-9JI" secondAttribute="bottom" id="vEX-d7-FJq"/>
+                            <constraint firstItem="dba-Dc-9JI" firstAttribute="top" secondItem="kh9-bI-dsS" secondAttribute="topMargin" id="xyj-R1-Aup"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="splashView" destination="dba-Dc-9JI" id="at4-vk-UA0"/>
+                        <outlet property="viewWeb" destination="Q8s-m3-LkO" id="TgN-fe-h2r"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
+            </objects>
+        </scene>
+    </scenes>
+</document>
