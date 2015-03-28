@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-
+@class ECOnboardingViewController;
 //Local notifications
 #define ELASTICODE_SESSION_STARTED @"ELASTICODE_SESSION_INITIALIZE_SUCCESS"
 #define ELASTICODE_SESSION_RESTARTED @"ELASTICODE_SESSION_RESTARTED_SUCCESS"
@@ -18,7 +18,8 @@ enum logLevel
 {
     elastiCodeLogLevelNone,
     elastiCodeLogLevelErrors,
-    elastiCodeLogLevelDetailed
+    elastiCodeLogLevelDetailed,
+    elastiCodeLogLevelVerbose
 };
 
 typedef enum dObjType
@@ -28,11 +29,25 @@ typedef enum dObjType
     ElastiCodeDObjType_int = 2,
     ElastiCodeDObjType_double = 3,
     ElastiCodeDObjType_string = 4,
+    ElastiCodeDObjType_color = 7,
     ElastiCodeDObjType_arrayOfBool = 11,
     ElastiCodeDObjType_arrayOfInt = 12,
     ElastiCodeDObjType_arrayOfDouble = 13,
-    ElastiCodeDObjType_arrayOfString = 14
+    ElastiCodeDObjType_arrayOfString = 14,
+    ElastiCodeDObjType_arrayOfColor = 17,
 } ElastiCodeDObjType;
+
+typedef enum listOfOptionsType
+{
+    ElastiCodeListOfOptionsType_none = 0,
+    ElastiCodeListOfOptionsType_string = 4,
+    ElastiCodeListOfOptionsType_image = 5,
+    ElastiCodeListOfOptionsType_action = 6,
+    ElastiCodeListOfOptionsType_arrayOfInt = 12,
+    ElastiCodeListOfOptionsType_arrayOfString = 14,
+    ElastiCodeListOfOptionsType_arrayOfImage = 15,
+    ElastiCodeListOfOptionsType_arrayOfAction = 16
+} ElastiCodeListOfOptionsType;
 
 @interface ElastiCode : NSObject
 
@@ -61,7 +76,7 @@ typedef enum dObjType
 +(void)startSession:(NSString*)elastiCodeApiKey;
 
 
-
++ (void)startSession:(NSString*)elastiCodeApiKey onBoardingVersion:(NSString*) onBoardingVersion;
 
 /**
  *  Set the connection timeout for the ElastiCode SDK.
@@ -70,13 +85,28 @@ typedef enum dObjType
  *
  *  @param timeout The new timeout in seconds
  */
-+(void)setConnectionTimeout:(NSUInteger) timeout;
++(void)setConnectionTimeout:(NSTimeInterval) timeout;
+
+/**
+ *  Set the image download timeout for the ElastiCode SDK.
+ *  Default value is 5 seconds, in case of slow internet connection.
+ *  You can change to any positive number.
+ *
+ *  @param timeout The new timeout in seconds
+ */
++(void)setImageDownloadTimeout:(NSUInteger) timeout;
 
 /**
  *  When you want to force restart the session,
  *  you can call this method to perform a session restart.
  */
 + (void)restartSession;
+
+/**
+ *  Add additional attributes to the session
+ *  @param attributes The attributes relevant to the session
+ */
++(void)addSessionAttributes:(NSDictionary*)attributes;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark - Share User Info
@@ -111,7 +141,7 @@ typedef enum dObjType
  *  @param multipleVisits Indicate if this case can become visible more than once
  *
  */
-+(void)defineCase:(NSString*)caseName withNumOfStates:(int)numOfStates;
++(void)defineCase:(NSString*)caseName withNumOfStates:(NSInteger)numOfStates;
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -149,7 +179,7 @@ typedef enum dObjType
  *
  *  @return The selected state index. 0 for default.
  */
-+(int)stateIndexForCase:(NSString*)caseName;
++(NSInteger)stateIndexForCase:(NSString*)caseName;
 
 
 /**
@@ -162,7 +192,7 @@ typedef enum dObjType
  *
  *  @return The selected state index. 0 for default.
  */
-+(int)stateIndexWithoutVisitForCase:(NSString*)caseName;
++(NSInteger)stateIndexWithoutVisitForCase:(NSString*)caseName;
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -288,12 +318,33 @@ typedef enum dObjType
 
 
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+#pragma mark - On boarding
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
 
++(ECOnboardingViewController*) createOnBoardingWithScreens:(NSArray*) onBoardingScreens
+                                               WithVersion:(NSString *)onBoardingVersion
+                                         completionHandler:(dispatch_block_t) completionBlock
+                                         additionalActions:(NSArray*) additionalActions;
++(void) defineOnBoardingWithVersion:(NSString*) onBoardingVersion templateIndex:(int) templateIndex;
++(int) onBoardingTemplateTypeForVersion:(NSString*) onBoardingVersion;
++(void) visitOnBoarding:(NSString*) onBoardingVersion;
++(void) onBoardingGoalReached:(NSString *)onBoardingVersion;
 
++(void) onBoardingDObject:(NSString*) dObjName type:(ElastiCodeDObjType) type elementGroup:(NSUInteger) elementGrpup defaultValues:(NSArray*) dObjArray;
++(void) onBoardingText:(NSString*) textName elementGroup:(NSUInteger) elementGrpup defaultValues:(NSArray*) textArray;
++(void) onBoardingImage:(NSString*) imageName elementGroup:(NSUInteger) elementGrpup defaultValues:(NSArray*) imageArray listOfOptions:(NSArray*) imagesNames;
++(void) onBoardingColor:(NSString*) colorName elementGroup:(NSUInteger) elementGrpup defaultValues:(NSArray*) colorArray;
++(void) onBoardingAction:(NSString*) actionName elementGroup:(NSUInteger) elementGrpup defaultValues:(NSArray*) actionNamesArray listOfOptions:(NSDictionary*) namesAndActions;
++(void) onBoardingDObject:(NSString*) dObjName type:(ElastiCodeListOfOptionsType) type elementGroup:(NSUInteger) elementGrpup defaultValues:(NSArray*) dObjArray listOfOptions:(NSArray*) optionsNames;
 
++(NSArray*) getOnBoardingDObject:(NSString*) dObjName;
++(NSArray*) getOnBoardingText:(NSString*) textName;
++(NSArray*) getOnBoardingImage:(NSString*) imageName; 
++(NSArray*) getOnBoardingColor:(NSString*) colorName;
++(NSArray*) getOnBoardingAction:(NSString*) action;
 
-
-
++(NSString*) getDeviceType;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark - Logging
@@ -316,7 +367,9 @@ typedef enum dObjType
 #pragma mark - Debugging
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
+/**
+ *  Activate debug mode
+ */
 +(void)activateDebugMode __deprecated_msg("Use devModeWithLogging: method instead");
 
 /**
